@@ -8,10 +8,10 @@
         <el-card class="box-card my-5">
             <el-row>
                 <el-col :span="4" class="d-flex justify-content-center align-items-center">
-                    <el-avatar :size="100" :src="avatarUrl" />
+                    <el-avatar class="border border-5" :size="100" :src="avatarUrl" />
                 </el-col>
                 <el-col :span="20" class="d-flex justify-content-start align-items-center">
-                    <h3>歡迎 {{ $store.state.userInfo.name }} 回來！{{ welcomeText }}</h3>
+                    <h3 class="mb-0">歡迎 {{ $store.state.userInfo.name }} 回來！{{ welcomeText }}</h3>
                 </el-col>
             </el-row>
         </el-card>
@@ -40,18 +40,18 @@ const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每
 
 <style scoped>
 .el-carousel__item h3 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: center;
+    color: #475669;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+    text-align: center;
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+    background-color: #99a9bf;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+    background-color: #d3dce6;
 }
 </style>
