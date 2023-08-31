@@ -1,5 +1,3 @@
 <template>
-    <div>
-        Not Found 404
-    </div>
-</template>
+    <el-empty description="Not Found 404" />
+</template>  

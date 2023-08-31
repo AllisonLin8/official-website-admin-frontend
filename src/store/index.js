@@ -1,18 +1,29 @@
 import { createStore } from 'vuex'
+import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
 
-export default createStore({
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: state => ({ isCollapsed: state.isCollapsed }),
+})
+
+const store = new Vuex.Store({
   state: {
-    isRouterSetUp:false,
+    isRouterSetUp: false,
+    isCollapsed: false,
   },
-  getters: {
-  },
+  getters: {},
   mutations: {
-    changeRouterSetUp(state,value) {
+    changeRouterSetUp(state, value) {
       state.isRouterSetUp = value
     },
+    changeCollapsed(state) {
+      state.isCollapsed = !state.isCollapsed
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
+  actions: {},
+  modules: {},
+  plugins: [vuexLocal.plugin],
 })
+
+export default store
