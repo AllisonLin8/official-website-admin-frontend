@@ -8,7 +8,7 @@
                         <div class="ms-3 d-flex align-items-center fw-bold fs-3">企業官網後台管理</div>
                 </div>
                 <div class="right d-flex">
-                        <div class="d-flex align-items-center fw-bold fs-5">歡迎 admin 回來</div>
+                        <div class="d-flex align-items-center fw-bold fs-5">歡迎 {{ $store.state.userInfo.name }} 回來</div>
                         <el-dropdown trigger="click" class="d-flex align-items-center">
                                 <span class="el-dropdown-link ms-3">
                                         <el-icon :size="30" id="custom-el-icon" color="#005089"><User /></el-icon>
@@ -39,6 +39,7 @@ const handleCenter = () => {
 }
 const handleLogout = () => {
         localStorage.removeItem('token')
+        store.commit('clearUserInfo')
         Reminder.fire({
                 icon: 'success',
                 title: '登出成功！'

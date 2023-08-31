@@ -4,13 +4,17 @@ import VuexPersistence from 'vuex-persist'
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  reducer: state => ({ isCollapsed: state.isCollapsed }),
+  reducer: state => ({
+    isCollapsed: state.isCollapsed,
+    userInfo: state.userInfo,
+  }),
 })
 
 const store = new Vuex.Store({
   state: {
     isRouterSetUp: false,
     isCollapsed: false,
+    userInfo: {},
   },
   getters: {},
   mutations: {
@@ -19,6 +23,15 @@ const store = new Vuex.Store({
     },
     changeCollapsed(state) {
       state.isCollapsed = !state.isCollapsed
+    },
+    changeUserInfo(state, value) {
+      state.userInfo = {
+        ...state.userInfo,
+        ...value,
+      }
+    },
+    clearUserInfo(state) {
+      state.userInfo = {}
     },
   },
   actions: {},

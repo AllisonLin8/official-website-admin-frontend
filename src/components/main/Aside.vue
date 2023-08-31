@@ -1,6 +1,5 @@
 <template>
         <el-aside width="auto">
-            <!-- :width="$store.state.isCollapsed ? '64px' : '200px'" -->
             <el-menu
             :collapse="$store.state.isCollapsed"
             :router="true"

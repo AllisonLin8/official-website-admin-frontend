@@ -38,6 +38,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { loadSlim } from 'tsparticles-slim'
 import { Reminder } from './../utils/helpers'
+import store from '@/store'
 
 const particlesInit = async engine => {
     await loadSlim(engine)
@@ -61,6 +62,7 @@ const handleSubmit = () => {
             if (res.data.ActionType === 'OK') {
                 // 3. 設置token：axios攔截器-helper.js
                 // 4. 跳轉畫面
+                store.commit('changeUserInfo', res.data.userInfo)
                 router.push({ path: '/home' })
                 Reminder.fire({
                     icon: 'success',
