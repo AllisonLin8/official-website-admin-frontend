@@ -34,12 +34,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { loadSlim } from 'tsparticles-slim'
 import { Reminder } from './../utils/helpers'
 import store from '@/store'
-
+import { adminApi } from '@/apis/admin'
 const particlesInit = async engine => {
     await loadSlim(engine)
 }
@@ -57,10 +56,10 @@ const handleSubmit = () => {
         return
     }
     // 2. API驗證
-    axios.post('/adminapi/user/login', { email:email.value, password:password.value })
+    adminApi.users.login({ email:email.value, password:password.value })
         .then(res => {
             if (res.data.ActionType === 'OK') {
-                // 3. 設置token：axios攔截器-helper.js
+                // 3. 設置token：axios攔截器-axios.js
                 // 4. 跳轉畫面
                 store.commit('changeUserInfo', res.data.userInfo)
                 router.push({ path: '/home' })

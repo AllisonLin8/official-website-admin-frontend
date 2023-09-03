@@ -11,7 +11,10 @@
                     <el-avatar class="border border-5" :size="100" :src="avatarUrl" />
                 </el-col>
                 <el-col :span="20" class="d-flex justify-content-start align-items-center">
-                    <h3 class="mb-0">歡迎 {{ $store.state.userInfo.name }} 回來！{{ welcomeText }}</h3>
+                    <h3 class="mb-0">歡迎
+                        <span class="fw-bolder"> {{ $store.state.userInfo.name }} </span>
+                        回來！{{ welcomeText }}
+                    </h3>
                 </el-col>
             </el-row>
         </el-card>
@@ -27,6 +30,8 @@
                 </el-carousel-item>
             </el-carousel>
         </el-card>
+        <!-- 測試token是否刷新↓ -->
+        <!-- <button @click="onclick">click</button> -->
 </template>
 
 <script setup>
@@ -35,7 +40,19 @@ import { computed } from 'vue'
 const userAvatar = store.state.userInfo.avatar
 const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 const avatarUrl = computed(() => userAvatar ? userAvatar : circleAvatar)
-const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每一天🎉 ʕ๑•ɷ•๑ʔ 💚':'喝杯咖啡☕繼續努力 ฅʕ•Ⱉ•ʔฅ 💚')
+const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每一天💚 ʕ๑•ɷ•๑ʔ 🎉' : '喝杯咖啡☕繼續努力 ฅʕ•Ⱉ•ʔฅ 💚')
+
+// 測試token是否刷新↓
+// import { adminApi } from '../../apis/admin'
+// const onclick = ()=>{
+//     adminApi.users.getHome()
+//         .then(res => {
+//         console.log('Home請求成功')
+//         })
+//         .catch(err => {
+//         console.log('Home請求失敗')
+//     })
+// }
 </script>
 
 <style scoped>
