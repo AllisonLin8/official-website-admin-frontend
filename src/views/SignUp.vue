@@ -13,32 +13,38 @@
                 <el-card :size="20">
                     <template #header>
                         <div class="card-header">
-                            <span class="fs-4 fw-bold">登入</span>
+                            <span class="fs-4 fw-bold">註冊</span>
                         </div>
                     </template>
                     <el-form
-                        ref="loginFormRef"
-                        :model="loginForm"
-                        :rules="loginFormRules"
+                        ref="signUpFormRef"
+                        :model="signUpForm"
+                        :rules="signUpFormRules"
                         label-position="top"
                         label-width="120px"
                         status-icon
                     >
+                        <el-form-item label="Name" prop="name">
+                            <el-input v-model="signUpForm.name" />
+                        </el-form-item>
                         <el-form-item label="Email" prop="email">
-                            <el-input v-model="loginForm.email" />
+                            <el-input v-model="signUpForm.email" />
                         </el-form-item>
                         <el-form-item label="Password" prop="password">
-                            <el-input v-model="loginForm.password" type="password" />
+                            <el-input v-model="signUpForm.password" type="password" />
+                        </el-form-item>
+                        <el-form-item label="Confirm Password" prop="confirmPassword">
+                            <el-input v-model="signUpForm.confirmPassword" type="password" />
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm(loginFormRef)">Submit</el-button>
+                            <el-button type="primary" @click="submitForm(signUpFormRef)">Submit</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
             </div>
         </div>
 
-        <a class="text-center mt-5 fs-6" @click="handleSignUp">Sign Up</a>
+        <a class="text-center mt-5 fs-6" @click="handleLogin">Log In</a>
         <p class="mt-5 mb-3 text-muted text-center">&copy; 2023 - {{ new Date().getFullYear() }} by Allison Lin</p>
     </div>
 </template>
@@ -48,7 +54,6 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadSlim } from 'tsparticles-slim'
 
-import store from '@/store'
 import { adminApi } from '@/apis/admin'
 import { Reminder } from './../utils/helpers'
 
@@ -58,40 +63,36 @@ const particlesInit = async engine => {
 
 const router = useRouter()
 
-const handleSignUp = () => {
-    router.push('/signup')
+const handleLogin = () => {
+    router.push('/login')
 }
 
-const loginFormRef = ref()
-const loginForm = reactive({
+const signUpFormRef = ref()
+const signUpForm = reactive({
+    name:'',
     email: '',
     password: '',
+    confirmPassword: '',
 })
 
-const loginFormRules = reactive({
+const signUpFormRules = reactive({
+    name: [{ required: true, message: '請輸入 Name！', trigger: 'blur' }],
     email: [{ required: true, message: '請輸入 Email！', trigger: 'blur' }],
     password: [{ required: true, message: '請輸入 Password！', trigger: 'blur' }],
+    confirmPassword: [{ required: true, message: '請輸入 Confirm Password！', trigger: 'blur' }],
 })
 
-const submitForm = async(loginFormRef) => {
-    if (!loginFormRef) return
-    await loginFormRef.validate((valid, fields) => {
+const submitForm = async (signUpFormRef) => {
+    if (!signUpFormRef) return
+    await signUpFormRef.validate((valid, fields) => {
         if (valid) {
-            adminApi.users.login(loginForm)
+            adminApi.users.signUp(signUpForm)
                 .then(res => {
                     if (res.data.status === 'success') {
-                        // 3. 設置token：axios攔截器-axios.js
-                        // 4. 跳轉畫面
-                        store.commit('changeUserInfo', res.data.userInfo)
-                        router.push({ path: '/home' })
+                        router.push({ path: '/login' })
                         Reminder.fire({
                             icon: 'success',
                             title: res.data.msg
-                        })
-                    } else {
-                        Reminder.fire({
-                            icon: 'warning',
-                            title: res.data.error
                         })
                     }
                 })

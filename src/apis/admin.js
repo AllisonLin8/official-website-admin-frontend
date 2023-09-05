@@ -6,11 +6,18 @@ export const adminApi = {
       // TODO 測試token是否刷新用
       return apiHelper.get('/adminapi/users/home')
     },
-    login({ email, password }) {
-      return apiHelper.post('/adminapi/users/login', { email, password })
+    login(loginData) {
+      return apiHelper.post('/adminapi/users/login', loginData)
     },
-    upload(newData) {
-      return apiHelper.post('/adminapi/users/upload', newData)
+    signUp(signUpData) {
+      return apiHelper.post('/adminapi/users/signup', signUpData)
+    },
+    upload(uploadData) {
+      return apiHelper.post('/adminapi/users/upload', uploadData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
   },
 }

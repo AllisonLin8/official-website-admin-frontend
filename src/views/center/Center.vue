@@ -45,8 +45,8 @@
                             </el-form-item>
 
                             <el-form-item>
-                                <el-button type="primary" @click="submitForm">更新</el-button>
-                                <el-button>取消</el-button>
+                                <el-button type="primary" @click="submitForm(userFormRef)">更新</el-button>
+                                <el-button @click="resetForm(userFormRef)">取消</el-button>
                             </el-form-item>
 
                         </el-form>
@@ -75,7 +75,7 @@ const userForm = reactive({
     name,
     intro,
     avatar,
-    file:null,
+    file: null,
 })
 
 const userFormRules = reactive({
@@ -90,8 +90,14 @@ const handleAvatarChange = (file) => {
     userForm.file = file
 }
 
-const submitForm = () => {
-    userFormRef.value.validate((valid) => {
+const resetForm = (userFormRef) => {
+    if (!userFormRef) return
+    userFormRef.resetFields()
+}
+
+const submitForm = async (userFormRef) => {
+    if (!userFormRef) return
+    await userFormRef.validate((valid, fields) => {
         if (valid) {
             const params = new FormData()
             for (let i in userForm) {
@@ -108,7 +114,6 @@ const submitForm = () => {
                     })
                 })
                 .catch(err => {
-                    console.log('這邊',err?.response?.data?.errors)
                     Reminder.fire({
                         icon: 'warning',
                         title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
