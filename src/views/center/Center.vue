@@ -81,7 +81,7 @@ const userForm = reactive({
 const userFormRules = reactive({
     name: [
         { required: true, message: '請輸入名稱！', trigger: 'blur' },
-        { min: 1, max: 20, message: '名稱長度需介於1至20字', trigger: 'blur' },
+        { min: 3, max: 20, message: '名稱長度需介於 3 至 20 字', trigger: 'blur' },
     ],
 })
 
@@ -99,7 +99,7 @@ const submitForm = () => {
             }
             adminApi.users.upload(params)
                 .then(res => {
-                    if (res.data.ActionType === 'OK') {
+                    if (res.data.status === 'success') {
                         store.commit('changeUserInfo', res.data.userInfo)
                     }
                     Reminder.fire({
@@ -108,11 +108,11 @@ const submitForm = () => {
                     })
                 })
                 .catch(err => {
+                    console.log('這邊',err?.response?.data?.errors)
                     Reminder.fire({
                         icon: 'warning',
-                        title: '發生未知錯誤，請稍後再試！'
+                        title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
                     })
-                    console.log(err)
                 })
         }
     })

@@ -44,14 +44,23 @@ const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每
 
 // 測試token是否刷新↓
 // import { adminApi } from '../../apis/admin'
+// import { Reminder } from '../../utils/helpers'
 // const onclick = ()=>{
 //     adminApi.users.getHome()
 //         .then(res => {
-//         console.log('Home請求成功')
+//             console.log('Home請求成功')
+//             Reminder.fire({
+//                 icon: 'success',
+//                 title: res.data.msg
+//             })
 //         })
 //         .catch(err => {
-//         console.log('Home請求失敗')
-//     })
+//             console.log('Home請求失敗')
+//             Reminder.fire({
+//                 icon: 'warning',
+//                 title: '發生未知錯誤，請稍後再試！'
+//             })
+//         })
 // }
 </script>
 

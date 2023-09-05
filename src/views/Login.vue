@@ -51,14 +51,14 @@ const handleSubmit = () => {
     if (!email.value || !password.value) {
         Reminder.fire({
         icon: 'warning',
-        title: '請填入 email 和 password'
+        title: '請填入 Email 和 Password'
         })
         return
     }
     // 2. API驗證
     adminApi.users.login({ email:email.value, password:password.value })
         .then(res => {
-            if (res.data.ActionType === 'OK') {
+            if (res.data.status === 'success') {
                 // 3. 設置token：axios攔截器-axios.js
                 // 4. 跳轉畫面
                 store.commit('changeUserInfo', res.data.userInfo)
@@ -76,10 +76,9 @@ const handleSubmit = () => {
         })
         .catch(err => {
             Reminder.fire({
-                    icon: 'warning',
-                    title: '發生未知錯誤，請稍後再試！'
+                icon: 'warning',
+                title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
             })
-            console.log(err)
         })
     
 }
