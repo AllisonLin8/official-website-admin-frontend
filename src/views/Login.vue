@@ -1,21 +1,19 @@
 <template>
     <div class="container d-flex flex-column justify-content-center vh-100">
-
-        <vue-particles
-            id="tsparticles"
-            :particlesInit="particlesInit"
-            url="/particles.json"
-        />
+        <Background />
 
         <div class="row d-flex justify-content-center w-100">
             <div class="col-md-6">
                 <h1 class="text-center fw-bold text-primary-emphasis mb-5">企業官網後台管理</h1>
+
                 <el-card :size="20">
+
                     <template #header>
                         <div class="card-header">
                             <span class="fs-4 fw-bold">登入</span>
                         </div>
                     </template>
+
                     <el-form
                         ref="loginFormRef"
                         :model="loginForm"
@@ -23,6 +21,7 @@
                         label-position="top"
                         label-width="120px"
                         status-icon
+                        @keyup.enter="submitForm(loginFormRef)"
                     >
                         <el-form-item label="Email" prop="email">
                             <el-input v-model="loginForm.email" />
@@ -34,6 +33,7 @@
                             <el-button type="primary" @click="submitForm(loginFormRef)">Submit</el-button>
                         </el-form-item>
                     </el-form>
+                    
                 </el-card>
             </div>
         </div>
@@ -46,21 +46,15 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { loadSlim } from 'tsparticles-slim'
+
+import Background from '@/components/Background.vue'
 
 import store from '@/store'
 import { adminApi } from '@/apis/admin'
-import { Reminder } from './../utils/helpers'
+import { Reminder } from '@/utils/helpers'
 
-const particlesInit = async engine => {
-    await loadSlim(engine)
-}
 
 const router = useRouter()
-
-const handleSignUp = () => {
-    router.push('/signup')
-}
 
 const loginFormRef = ref()
 const loginForm = reactive({
@@ -73,7 +67,11 @@ const loginFormRules = reactive({
     password: [{ required: true, message: '請輸入 Password！', trigger: 'blur' }],
 })
 
-const submitForm = async(loginFormRef) => {
+const handleSignUp = () => {
+    router.push('/signup')
+}
+
+const submitForm = async (loginFormRef) => {
     if (!loginFormRef) return
     await loginFormRef.validate((valid, fields) => {
         if (valid) {

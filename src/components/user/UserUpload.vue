@@ -14,13 +14,13 @@
 import { Plus } from '@element-plus/icons-vue'
 
 const props = defineProps({
-  avatar: String,
+    avatar: String,
 })
 
 const emit = defineEmits(['emitAvatarChange'])
 
-const onAvatarChange = (file) => {
-  emit('emitAvatarChange', file.raw)
+const onAvatarChange = (res) => {
+    emit('emitAvatarChange', res.raw)
 }
 </script>
 

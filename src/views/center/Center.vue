@@ -9,7 +9,7 @@
                 <el-col :span="8">
                     <el-card class="box-card d-flex flex-column justify-content-center align-items-center text-center">
                         <el-avatar class="border border-5" :size="100" :src="avatarUrl" />
-                        <h3 class="fw-bold fs-1">{{ $store.state.userInfo.name }}</h3>
+                        <h3 class="mb-3 fw-bold fs-1">{{ $store.state.userInfo.name }}</h3>
                         <h3 class="fs-5 bg-info bg-opacity-10 border border-info rounded">{{ $store.state.userInfo.role }}</h3>
                     </el-card>
                 </el-col>
@@ -27,6 +27,8 @@
                             label-position="top"
                             label-width="120px"
                             status-icon
+                            @keyup.enter="submitForm(userFormRef)"
+                            @keyup.esc="resetForm(userFormRef)"
                         >
                             <el-form-item label="Name" prop="name">
                                 <el-input v-model="userForm.name" />
@@ -57,19 +59,18 @@
 </template>
 
 <script setup>
-import store from '@/store'
 import { computed, ref, reactive } from 'vue'
 
-import UserUpload from '../../components/upload/UserUpload'
-
-import { adminApi } from '../../apis/admin'
-import { Reminder } from '../../utils/helpers'
-
-const userAvatar = store.state.userInfo.avatar
-const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-const avatarUrl = computed(() => userAvatar ? userAvatar : circleAvatar)
+import store from '@/store'
+import { adminApi } from '@/apis/admin'
+import { Reminder } from '@/utils/helpers'
+import UserUpload from '@/components/user/UserUpload'
 
 const { name, intro, avatar } = store.state.userInfo
+
+const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const avatarUrl = computed(() => avatar ? avatar : circleAvatar)
+
 const userFormRef = ref()
 const userForm = reactive({
     name,
