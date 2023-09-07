@@ -19,5 +19,11 @@ export const adminApi = {
         },
       })
     },
+    getUsers() {
+      return apiHelper.get('/adminapi/users')
+    },
+    deleteUser(id) {
+      return apiHelper.delete(`/adminapi/users/${id}`)
+    },
   },
 }

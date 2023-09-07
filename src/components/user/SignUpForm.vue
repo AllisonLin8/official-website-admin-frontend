@@ -87,7 +87,6 @@ const submitForm = async (signUpFormRef) => {
     if (!signUpFormRef) return
     await signUpFormRef.validate((valid, fields) => {
         if (valid) {
-            console.log(signUpForm)
             adminApi.users.signUp(signUpForm)
                 .then(res => {
                     if (res.data.status === 'success') {
