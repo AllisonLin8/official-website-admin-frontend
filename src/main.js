@@ -7,6 +7,7 @@ import 'element-plus/dist/index.css'
 import Particles from 'particles.vue3'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
+import '@/assets/app.css'
 
 createApp(App)
   .use(Particles)

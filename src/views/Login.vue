@@ -89,7 +89,7 @@ const submitForm = async (loginFormRef) => {
                     } else {
                         Reminder.fire({
                             icon: 'warning',
-                            title: res.data.error
+                            title: res.data.msg
                         })
                     }
                 })

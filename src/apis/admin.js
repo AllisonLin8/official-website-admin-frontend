@@ -22,8 +22,19 @@ export const adminApi = {
     getUsers() {
       return apiHelper.get('/adminapi/users')
     },
+    getUser(id) {
+      return apiHelper.get(`/adminapi/users/${id}`)
+    },
     deleteUser(id) {
       return apiHelper.delete(`/adminapi/users/${id}`)
+    },
+    putUser(id, editData) {
+      return apiHelper.put(`/adminapi/users/edit/${id}`, editData)
+    },
+  },
+  roles: {
+    getRoles() {
+      return apiHelper.get('/adminapi/roles')
     },
   },
 }

@@ -63,7 +63,7 @@ import { computed, ref, reactive } from 'vue'
 
 import store from '@/store'
 import { adminApi } from '@/apis/admin'
-import { Reminder } from '@/utils/helpers'
+import { Reminder, formErrReminder } from '@/utils/helpers'
 import UserUpload from '@/components/user/UserUpload'
 
 const { name, intro, avatar } = store.state.userInfo
@@ -120,6 +120,8 @@ const submitForm = async (userFormRef) => {
                         title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
                     })
                 })
+        } else {
+            formErrReminder(fields)
         }
     })
 }

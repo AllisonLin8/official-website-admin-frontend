@@ -35,27 +35,30 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="email" label="Email" style="width: 100%" />
-                    <el-table-column fixed="right" width="220" >
+                    <el-table-column fixed="right" label="Operations" width="220">
                         <template #default="scope">
-                                <span v-if="!scope.row.isDeleted">
-                                    <el-popconfirm title="你確定要刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
-                                        <template #reference>
-                                            <el-button
-                                            size="small"
-                                            type="danger"
-                                            >刪除</el-button>
-                                        </template>
-                                    </el-popconfirm>
-                                </span>
-                                <span v-else>
-                                    <el-popconfirm title="你確定要取消刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
-                                        <template #reference>                                        
-                                            <el-button
-                                            size="small"
-                                            type="warning"
-                                            >取消刪除</el-button>
-                                        </template>
-                                    </el-popconfirm>
+                                <EditUser :row="scope.row" :roleOptions="roleOptions" />
+                                <span v-if="scope.row.name !== 'root' && store.state.userInfo.role === 'root'">
+                                    <span v-if="!scope.row.isDeleted">
+                                        <el-popconfirm title="你確定要刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
+                                            <template #reference>
+                                                <el-button
+                                                size="small"
+                                                type="danger"
+                                                >刪除</el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </span>
+                                    <span v-else>
+                                        <el-popconfirm title="你確定要取消刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
+                                            <template #reference>                                        
+                                                <el-button
+                                                size="small"
+                                                type="warning"
+                                                >取消刪除</el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </span>
                                 </span>
                         </template>
                     </el-table-column>
@@ -67,13 +70,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+import store from '@/store'
 import { adminApi } from '@/apis/admin'
 import { Reminder } from '@/utils/helpers'
-
+import EditUser from '@/components/user/EditUser'
 const usersData = ref([])
+let roleOptions = ref({})
 
 onMounted(() => {
     getUsers()
+    getRoles()
 })
 
 const getUsers = async () => {
@@ -86,6 +92,19 @@ const getUsers = async () => {
                 icon: 'warning',
                 title: '發生未知錯誤，請稍後再試！'
             })
+            return
+        })
+}
+
+const getRoles = async () => {
+    await adminApi.roles.getRoles()
+        .then(res => {
+            if (res.data.status === 'success') {
+                let { roles } = res.data
+                roleOptions.value = roles
+            }
+        })
+        .catch(err => {
             return
         })
 }

@@ -50,7 +50,7 @@ import { useRouter } from 'vue-router'
 
 import store from '@/store'
 import { adminApi } from '@/apis/admin'
-import { Reminder } from '@/utils/helpers'
+import { Reminder, formErrReminder } from '@/utils/helpers'
 
 const router = useRouter()
 const signUpFormRef = ref()
@@ -106,6 +106,8 @@ const submitForm = async (signUpFormRef) => {
                         title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
                     })
                 })
+        } else {
+            formErrReminder(fields)
         }
     })
 }
