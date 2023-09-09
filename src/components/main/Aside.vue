@@ -15,7 +15,7 @@
                     <span>個人資料</span>
                 </el-menu-item>
 
-                <el-sub-menu index="/user-manage">
+                <el-sub-menu index="/user-manage" v-root>
                     <template #title>
                         <el-icon><UserFilled /></el-icon>
                         <span>使用者管理</span>
@@ -47,9 +47,17 @@
 </template>
 
 <script setup>
-import { HomeFilled, Avatar, UserFilled, MessageBox, Reading } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
+
+import store from '@/store'
+import { HomeFilled, Avatar, UserFilled, MessageBox, Reading } from '@element-plus/icons-vue'
 const route = useRoute()
+
+const vRoot = {
+    mounted(el) {
+        if (store.state.userInfo.role !== 'root') return el.parentNode.removeChild(el)
+    },
+}
 </script>
 
 <style lang="scss" scoped>

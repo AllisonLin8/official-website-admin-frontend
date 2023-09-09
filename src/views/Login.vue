@@ -81,6 +81,7 @@ const submitForm = async (loginFormRef) => {
                         // 3. 設置token：axios攔截器-axios.js
                         // 4. 跳轉畫面
                         store.commit('changeUserInfo', res.data.userInfo)
+                        store.commit('changeRouterSetUp', false) // 每次登入都要檢查路由，防止使用者在沒有logout的情況下，使用連結直接到登入頁(這樣會保留上一個使用者的路由config)
                         router.push({ path: '/home' })
                         Reminder.fire({
                             icon: 'success',
