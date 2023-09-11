@@ -37,4 +37,25 @@ export const adminApi = {
       return apiHelper.get('/adminapi/roles')
     },
   },
+  news: {
+    upload(uploadData) {
+      return apiHelper.post('/adminapi/news/upload', uploadData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    postNews(newsData) {
+      return apiHelper.post('/adminapi/news/', newsData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+  },
+  categories: {
+    getCategories() {
+      return apiHelper.get('/adminapi/categories')
+    },
+  },
 }

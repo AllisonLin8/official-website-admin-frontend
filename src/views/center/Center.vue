@@ -39,10 +39,10 @@
                             </el-form-item>
                             
                             <el-form-item label="Avatar" prop="avatar">
-                                <UserUpload 
-                                    :avatar="userForm.avatar"
+                                <UploadImg 
+                                    :img="userForm.avatar"
                                     :file="userForm.file"
-                                    @emitAvatarChange="handleAvatarChange"
+                                    @emitImgChange="handleAvatarChange"
                                 />
                             </el-form-item>
 
@@ -64,7 +64,7 @@ import { computed, ref, reactive } from 'vue'
 import store from '@/store'
 import { adminApi } from '@/apis/admin'
 import { Reminder, formErrReminder } from '@/utils/helpers'
-import UserUpload from '@/components/user/UserUpload'
+import UploadImg from '@/components/UploadImg'
 
 const { name, intro, avatar } = store.state.userInfo
 
