@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, watch, toRaw } from 'vue'
+import { ref, watch, toRaw, onMounted } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
 import BlotFormatter from 'quill-blot-formatter'
@@ -41,6 +41,7 @@ const emit = defineEmits(['emitOnEditorChange', 'emitOnEditorClear'])
 
 const props = defineProps({
   clearEditor: Boolean,
+  content: String,
 })
 
 const toolbarOptions = [
@@ -116,4 +117,8 @@ watch(() => props.clearEditor, async (newValue) => {
   emit('emitOnEditorClear', false)
   await toRaw(myQuillEditor).value.setContents('')
 }, { deep: true })
+
+onMounted(async () => {
+  props.content && await toRaw(myQuillEditor).value.setContents(props.content)
+})
 </script>

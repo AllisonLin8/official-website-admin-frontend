@@ -52,6 +52,27 @@ export const adminApi = {
         },
       })
     },
+    getNews(id, isDateFormatted) {
+      return apiHelper.get(
+        `/adminapi/news/${id}?isDateFormatted=${isDateFormatted}`
+      )
+    },
+    getNewsList() {
+      return apiHelper.get('/adminapi/newslist')
+    },
+    patchNews(id) {
+      return apiHelper.patch(`/adminapi/news/publish/${id}`)
+    },
+    deleteNews(id) {
+      return apiHelper.delete(`/adminapi/news/${id}`)
+    },
+    putNews(newsData) {
+      return apiHelper.put('/adminapi/news/', newsData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
   },
   categories: {
     getCategories() {

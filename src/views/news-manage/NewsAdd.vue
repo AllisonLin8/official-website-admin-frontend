@@ -1,5 +1,5 @@
 <template>
-    <div class="col-11 mx-auto">
+    <el-card :size="20" class="container mt-3 mx-auto mt-4">
         <el-page-header icon="null" title="案例管理" class="mt-3 mb-5">
             <template #content>
                 <span class="text-large font-600 mr-3"> 創建案例 </span>
@@ -50,11 +50,10 @@
                 <el-button type="primary" @click="submitForm(newsFormRef)">儲存</el-button>
             </el-form-item>
         </el-form>
-    </div>
+    </el-card>
 </template>
 
 <script setup>
-// import { useRouter } from 'vue-router'
 import { ref, reactive, onMounted } from 'vue'
 
 import Editor from '@/components/Editor'
