@@ -1,8 +1,8 @@
 <template>
     <vue-particles
         id="tsparticles"
-        :particlesInit="particlesInit"
         url="/particles.json"
+        :particlesInit="particlesInit"
     />
 </template>
 

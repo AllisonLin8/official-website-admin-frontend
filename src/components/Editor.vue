@@ -4,9 +4,9 @@
       <div class="me-5 text-secondary">總字數：{{ TextLength }}</div>
       <el-popconfirm
         title="你確定要清空嗎？"
-        confirm-button-text="確定"
         cancel-button-text="取消"
-        @confirm="resetContent"
+        confirm-button-text="確定"
+        @confirm="clearContent"
       >
         <template #reference>
           <el-button size="small" type="danger">清空</el-button>
@@ -14,11 +14,11 @@
       </el-popconfirm>
     </div>
     <QuillEditor
-      ref="myQuillEditor"
-      placeholder="寫點什麼..."
       theme="snow" 
       class="mx-auto"
       contentType="html"
+      ref="myQuillEditor"
+      placeholder="寫點什麼..."
       :toolbar="toolbarOptions"
       :modules="[uploadModule, BlotFormatterModule]"
       @update:content="onEditorChange($event)"
@@ -27,22 +27,22 @@
 </template>
 
 <script setup>
-import { ref, watch, toRaw, onMounted } from 'vue'
-import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
 import BlotFormatter from 'quill-blot-formatter'
+import { QuillEditor } from '@vueup/vue-quill'
+import { ref, watch, toRaw, onMounted } from 'vue'
 
 import { adminApi } from '@/apis/admin'
+
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const TextLength = ref(0)
 const myQuillEditor = ref(null)
-const emit = defineEmits(['emitOnEditorChange', 'emitOnEditorClear'])
-
 const props = defineProps({
-  clearEditor: Boolean,
+  submitAndClearEditor: Boolean,
   content: String,
 })
+const emit = defineEmits(['emitOnEditorChange', 'emitOnSubmitAndEditorClear'])
 
 const toolbarOptions = [
     // 粗體 斜體 底線 刪除線 -----['bold', 'italic', 'underline', 'strike']
@@ -75,7 +75,6 @@ const toolbarOptions = [
     ['link', 'image'],
     // ['table'] // 表格
 ]
-
 const uploadModule = ref({
   name: 'imageUploader',
   module: ImageUploader,
@@ -96,29 +95,29 @@ const uploadModule = ref({
     }
   }
 })
-
 const BlotFormatterModule = ref({
   name: 'blotFormatter',
   module: BlotFormatter,
   options: {/* options */}
 })
 
-const resetContent = () => {
-  myQuillEditor.value.setContents('')
+const clearContent = async () => {
+  await myQuillEditor.value.setContents('')
 }
 
-const onEditorChange = (e) => {
-  TextLength.value = myQuillEditor.value.getText().length - 1
+const onEditorChange = async (e) => {
+  TextLength.value = await myQuillEditor.value.getText().length - 1
   emit('emitOnEditorChange', e)
 }
 
-watch(() => props.clearEditor, async (newValue) => {
+watch(() => props.submitAndClearEditor, async (newValue) => {
   // 監聽props.clearEditor本身的變化，提交表單改成true是一次、這邊改成false是一次
-  emit('emitOnEditorClear', false)
+  emit('emitOnSubmitAndEditorClear', false)
   await toRaw(myQuillEditor).value.setContents('')
-}, { deep: true })
+})
 
 onMounted(async () => {
+  // 在編輯頁時，確認content存在時，才將已存在的content設置到myQuillEditor上
   props.content && await toRaw(myQuillEditor).value.setContents(props.content)
 })
 </script>

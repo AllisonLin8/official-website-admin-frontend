@@ -3,7 +3,7 @@
             <div class="row">
                 <el-page-header icon="null" title="使用者管理" class="mt-3 mb-5">
                     <template #content>
-                        <span class="text-large font-600 mr-3"> 使用者清單 </span>
+                        <span class="text-large font-600 mr-3">使用者清單</span>
                     </template>
                 </el-page-header>
             </div>
@@ -37,29 +37,33 @@
                     <el-table-column prop="email" label="Email" style="width: 100%" />
                     <el-table-column fixed="right" label="Operations" width="220">
                         <template #default="scope">
-                                <EditUser :row="scope.row" :roleOptions="roleOptions" />
-                                <span v-if="scope.row.name !== 'root' && store.state.userInfo.role === 'root'">
-                                    <span v-if="!scope.row.isDeleted">
-                                        <el-popconfirm title="你確定要刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
-                                            <template #reference>
-                                                <el-button
-                                                size="small"
-                                                type="danger"
-                                                >刪除</el-button>
-                                            </template>
-                                        </el-popconfirm>
-                                    </span>
-                                    <span v-else>
-                                        <el-popconfirm title="你確定要取消刪除嗎？" confirm-button-text="確定" cancel-button-text="取消" @confirm="handleDelete(scope.row)">
-                                            <template #reference>                                        
-                                                <el-button
-                                                size="small"
-                                                type="warning"
-                                                >取消刪除</el-button>
-                                            </template>
-                                        </el-popconfirm>
-                                    </span>
+                            <EditUser :row="scope.row" :roleOptions="roleOptions" />
+                            <span v-if="scope.row.name !== 'root' && store.state.userInfo.role === 'root'">
+                                <span v-if="!scope.row.isDeleted">
+                                    <el-popconfirm
+                                        title="你確定要刪除嗎？"
+                                        cancel-button-text="取消"
+                                        confirm-button-text="確定"
+                                        @confirm="handleDelete(scope.row)"
+                                    >
+                                        <template #reference>
+                                            <el-button size="small" type="danger">刪除</el-button>
+                                        </template>
+                                    </el-popconfirm>
                                 </span>
+                                <span v-else>
+                                    <el-popconfirm
+                                        cancel-button-text="取消"
+                                        confirm-button-text="確定"
+                                        title="你確定要取消刪除嗎？"
+                                        @confirm="handleDelete(scope.row)"
+                                    >
+                                        <template #reference>                                        
+                                            <el-button size="small" type="warning">取消刪除</el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                </span>
+                            </span>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -70,67 +74,48 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+import EditUser from '@/components/user/EditUser'
+
 import store from '@/store'
 import { adminApi } from '@/apis/admin'
 import { Reminder } from '@/utils/helpers'
-import EditUser from '@/components/user/EditUser'
+
 const usersData = ref([])
-let roleOptions = ref({})
+const roleOptions = ref({})
+
+const getUsers = async () => {
+    try {
+        const res = await adminApi.users.getUsers()
+        if (res.data.status === 'success') return usersData.value = res.data.users
+    } catch (error) {
+        return Reminder.fire({ icon: 'warning', title: '發生未知錯誤，請稍後再試！' })
+    }
+}
+
+const getRoles = async () => {
+    try {
+        const res = await adminApi.roles.getRoles()
+        if (res.data.status === 'success') return Object.assign(roleOptions.value, res.data.roles)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const handleDelete = async row => {
+    try {
+        const res = await adminApi.users.deleteUser(row.id)
+        if (res.data.status === 'success') {
+            Reminder.fire({ icon: 'success', title: res.data.msg })
+            row.isDeleted = !row.isDeleted
+        }
+        return Reminder.fire({ icon: 'warning', title: res.data.msg || '發生未知錯誤，請稍後再試！' })
+    } catch (error) {
+        return Reminder.fire({ icon: 'warning', title: '發生未知錯誤，請稍後再試！' })
+    }
+}
 
 onMounted(() => {
     getUsers()
     getRoles()
 })
-
-const getUsers = async () => {
-    await adminApi.users.getUsers()
-        .then(res => {
-            usersData.value = res.data.users
-        })
-        .catch(err => {
-            Reminder.fire({
-                icon: 'warning',
-                title: '發生未知錯誤，請稍後再試！'
-            })
-            return
-        })
-}
-
-const getRoles = async () => {
-    await adminApi.roles.getRoles()
-        .then(res => {
-            if (res.data.status === 'success') {
-                let { roles } = res.data
-                roleOptions.value = roles
-            }
-        })
-        .catch(err => {
-            return
-        })
-}
-
-const handleDelete = async row => {
-    await adminApi.users.deleteUser(row.id)
-        .then(res => {
-            if (res.data.status === 'success') {
-                Reminder.fire({
-                    icon: 'success',
-                    title: res.data.msg
-                })
-                row.isDeleted = !row.isDeleted
-            } else if (res.data.status === 'error') {
-                Reminder.fire({
-                    icon: 'warning',
-                    title: res.data.msg
-                })
-            }
-        })
-        .catch(err => {
-            Reminder.fire({
-                icon: 'warning',
-                title: '發生未知錯誤，請稍後再試！'
-            })
-            return
-        })
-}
 </script>

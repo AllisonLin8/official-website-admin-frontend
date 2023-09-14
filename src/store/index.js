@@ -1,4 +1,3 @@
-import { createStore } from 'vuex'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 

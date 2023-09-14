@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-import Header from '../components/main/Header'
 import Aside from '../components/main/Aside'
-
+import Header from '../components/main/Header'
 </script>

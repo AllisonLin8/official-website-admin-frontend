@@ -1,35 +1,35 @@
 <template>
     <el-card :size="20" class="container mt-3 mx-auto mt-4">
-        <el-page-header icon="null" title="案例管理" class="mt-3 mb-5">
+        <el-page-header icon="null" title="新聞管理" class="mt-3 mb-5">
             <template #content>
-                <span class="text-large font-600 mr-3"> 創建案例 </span>
+                <span class="text-large font-600 mr-3"> 創建新聞 </span>
             </template>
         </el-page-header>
         <el-form
-        ref="newsFormRef"
-        :model="newsForm"
-        :rules="newsFormRules"
-        label-position="top"
-        label-width="120px"
-        status-icon
+            status-icon
+            ref="newsFormRef"
+            label-width="120px"
+            label-position="top"
+            :model="newsForm"
+            :rules="newsFormRules"
         >
             <el-form-item label="Title" prop="title">
                 <el-input v-model="newsForm.title" />
             </el-form-item>
             <el-form-item label="Content" prop="content">
                 <Editor
-                :clearEditor="clearEditor"
-                @emitOnEditorChange="handleEditorChange"
-                @emitOnEditorClear="handleEditorClear"
+                    :submitAndClearEditor="submitAndClearEditor"
+                    @emitOnEditorChange="handleEditorChange"
+                    @emitOnSubmitAndEditorClear="handleSubmitAndEditorClear"
                 />
             </el-form-item>
             <el-form-item label="Category" prop="category">
                 <el-select
-                v-model="newsForm.category"
-                placeholder="選擇類別"
-                :filterable="true"
-                value-key="id"
-                class="w-100"
+                    class="w-100"
+                    value-key="id"
+                    placeholder="選擇類別"
+                    v-model="newsForm.category"
+                    :filterable="true"
                 >
                     <el-option
                         v-for="item in categoryOptions"
@@ -62,8 +62,9 @@ import UploadImg from '@/components/UploadImg'
 import { adminApi } from '@/apis/admin'
 import { Reminder, formErrReminder } from '@/utils/helpers'
 
-let categoryOptions = ref([])
-const clearEditor = ref(false)
+const categoryOptions = ref([])
+const submitAndClearEditor = ref(false)
+
 const newsFormRef = ref()
 const newsForm = reactive({
     title: '',
@@ -83,67 +84,57 @@ const newsFormRules = reactive({
 const getCategories = async () => {
     try {
         const res = await adminApi.categories.getCategories()
-        if (res) {
-            categoryOptions.value = res.data.categories
-        } else {
-            console.error(res)
-        }
-    } catch(e) {
-        console.error(e)
+        if (res.data.status === 'success') return Object.assign(categoryOptions.value, res.data.categories)
+    } catch(error) {
+        console.error(error)
     }
 }
 
-const handleCoverChange = (file) => {
+const handleCoverChange = async (file) => {
     newsForm.cover = URL.createObjectURL(file)
-    newsForm.file = file
+    newsForm.file = await file
 }
 
-const handleEditorChange = (content) => {
-    newsForm.content = content
+const handleEditorChange = async (content) => {
+    newsForm.content = await content
 }
 
 const submitForm = async (newsFormRef) => {
-    if (!newsFormRef) return
-    await newsFormRef.validate((valid, fields) => {
-        if (valid) {
-            newsForm.categoryId = newsForm.category.id
-            delete newsForm.cover
-            delete newsForm.category
-            const params = new FormData()
-            for (let i in newsForm) {
-                params.append(i, newsForm[i])
-            }
-            adminApi.news.postNews(params)
-                .then(res => {
+    try {
+        if (!newsFormRef) return
+        await newsFormRef.validate(async (valid, fields) => {
+            if (valid) {
+                newsForm.categoryId = newsForm.category.id
+                const params = new FormData()
+                for (let i in newsForm) {
+                    params.append(i, newsForm[i])
+                }
+                try {
+                    const res = await adminApi.news.postNews(params)
                     if (res.data.status === 'success') {
-                        Reminder.fire({
-                            icon: 'success',
-                            title: res.data.msg
-                        })
+                        Reminder.fire({ icon: 'success', title: res.data.msg })
                         newsFormRef.resetFields()
-                        clearEditor.value = true
+                        submitAndClearEditor.value = true
                     } else {
-                        Reminder.fire({
-                            icon: 'warning',
-                            title: res.data.msg || '發生未知錯誤，請稍後再試！'
-                        })
+                        return Reminder.fire({ icon: 'warning', title: res.data.msg || '發生未知錯誤，請稍後再試！' })
                     }
-                })
-                .catch(err => {
-                    Reminder.fire({
-                        icon: 'warning',
-                        title: err?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'
-                    })
-                })
-        } else {
-            formErrReminder(fields)
-        }
-    })
+                } catch (error) {
+                    return Reminder.fire({icon: 'warning',title: error?.response?.data?.errors[0] || '發生未知錯誤，請稍後再試！'})
+                }
+            } else {
+                return formErrReminder(fields)
+            }
+        })
+    } catch (error) {
+        console.error(error)
+    }
 }
 
-const handleEditorClear = (value) => {
-    clearEditor.value = value
+const handleSubmitAndEditorClear = async (value) => {
+    submitAndClearEditor.value = await value
 }
 
-onMounted(getCategories)
+onMounted(() => {
+    getCategories()
+})
 </script>

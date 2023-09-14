@@ -1,9 +1,9 @@
 <template>
         <el-aside width="auto">
             <el-menu
-            :collapse="$store.state.isCollapsed"
             :router="true"
             :default-active="route.fullPath"
+            :collapse="$store.state.isCollapsed"
             >
                 <el-menu-item index="/home">
                     <el-icon><HomeFilled /></el-icon>
@@ -27,10 +27,10 @@
                 <el-sub-menu index="/news-manage">
                     <template #title>
                         <el-icon><MessageBox /></el-icon>
-                        <span>案例管理</span>
+                        <span>新聞管理</span>
                     </template>
-                        <el-menu-item index="/news-manage/addnews">添加案例</el-menu-item>
-                        <el-menu-item index="/news-manage/newslist">案例清單</el-menu-item>
+                        <el-menu-item index="/news-manage/addnews">添加新聞</el-menu-item>
+                        <el-menu-item index="/news-manage/newslist">新聞清單</el-menu-item>
                 </el-sub-menu>
 
                 <el-sub-menu index="/product-manage">

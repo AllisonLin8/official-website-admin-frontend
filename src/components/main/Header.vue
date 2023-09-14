@@ -1,6 +1,5 @@
 <template>
         <el-header class="d-flex justify-content-between">
-                <!-- <button @click="handleCollapsed">click</button> -->
                 <div class="left d-flex">
                         <div class="d-flex align-items-center">
                                 <el-icon :size="25" @click="handleCollapsed"><Menu /></el-icon>
@@ -28,22 +27,24 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { Menu, User } from '@element-plus/icons-vue'
+
 import { Reminder } from '@/utils/helpers'
+
 const store = useStore()
 const router = useRouter()
+
 const handleCollapsed = () => {
         store.commit('changeCollapsed')
 }
+
 const handleCenter = () => {
         router.push('/center')
 }
+
 const handleLogout = () => {
         localStorage.removeItem('token')
         store.commit('clearUserInfo')
-        Reminder.fire({
-                icon: 'success',
-                title: '登出成功！'
-        })
+        Reminder.fire({ icon: 'success', title: '登出成功！' })
         router.push('/login')
 }
 </script>

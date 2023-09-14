@@ -1,13 +1,11 @@
 import Swal from 'sweetalert2'
 
 const Reminder = Swal.mixin({
-  position: 'top-end',
-  showConfirmButton: false,
-  timerProgressBar: true,
   timer: 3000,
-  customClass: {
-    container: 'my-swal',
-  },
+  position: 'top-end',
+  timerProgressBar: true,
+  showConfirmButton: false,
+  customClass: { container: 'my-swal' },
 })
 
 const formErrReminder = fields => {

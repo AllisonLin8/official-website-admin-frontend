@@ -1,8 +1,8 @@
 <template>
     <el-upload
         class="img-uploader"
-        :show-file-list="false"
         :auto-upload="false"
+        :show-file-list="false"
         :on-change="onImgChange"
     >
         <img v-if="props.img" :src="props.img" class="img" />
@@ -25,28 +25,29 @@ const onImgChange = (res) => {
 </script>
 
 <style lang="scss">
-.img-uploader .el-upload {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
+.img-uploader {
+    .el-upload {
+        border: 1px dashed var(--el-border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: var(--el-transition-duration-fast);
+        &:hover {
+            border-color: var(--el-color-primary);
+        }
+    }
+    .img {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
 }
-
-.img-uploader .el-upload:hover {
-    border-color: var(--el-color-primary);
-}
-
 .el-icon.img-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 178px;
     height: 178px;
     text-align: center;
-}
-.img{
-    width: 178px;
-    height: 178px;
 }
 </style>

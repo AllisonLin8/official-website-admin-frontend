@@ -1,9 +1,9 @@
 <template>
     <el-card :size="20" class="container mt-3 mx-auto mt-4">
         <div class="row">
-            <el-page-header icon="null" title="案例管理" class="mt-3 mb-5">
+            <el-page-header icon="null" title="新聞管理" class="mt-3 mb-5">
                 <template #content>
-                    <span class="text-large font-600 mr-3"> 案例清單 </span>
+                    <span class="text-large font-600 mr-3">新聞清單</span>
                 </template>
             </el-page-header>
         </div>
@@ -11,7 +11,7 @@
             <el-table :stripe="true" :data="newsData" height="400" style="width: 100%">
                 <el-table-column fixed label="Cover" width="80">
                     <template #default="scope">
-                            <el-avatar :size="50" :src="scope.row.cover" />
+                        <el-avatar :size="50" :src="scope.row.cover" />
                     </template>
                 </el-table-column>
                 <el-table-column fixed prop="title" label="Title" style="width: 100%" />
@@ -19,11 +19,11 @@
                 <el-table-column label="Is Published" width="150">
                     <template #default="scope">
                         <el-switch 
+                            active-text="Yes"
+                            inactive-text="No"
                             v-model="scope.row.isPublished"
                             :active-value="1"
                             :inactive-value="0"
-                            active-text="Yes"
-                            inactive-text="No"
                             @change="handleIsPublishChange(scope.row)"
                         />
                     </template>
@@ -35,14 +35,14 @@
                         <PreviewNews :row="scope.row"/>
                         <el-button
                             circle
-                            :icon="Edit"
                             size="small"
+                            :icon="Edit"
                             @click="handleEdit(scope.row)"
                         />
                         <el-popconfirm
                             title="你確定要刪除嗎？"
-                            confirm-button-text="確定"
                             cancel-button-text="取消"
+                            confirm-button-text="確定"
                             @confirm="handleDelete(scope.row)"
                         >
                             <template #reference>
@@ -61,9 +61,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Edit, Delete } from '@element-plus/icons-vue'
 
+import PreviewNews from '@/components/news/PreviewNews'
+
 import { adminApi } from '@/apis/admin'
 import { Reminder } from '@/utils/helpers'
-import PreviewNews from '@/components/news/PreviewNews'
 
 const newsData = ref([])
 const router = useRouter()
@@ -82,6 +83,7 @@ const handleIsPublishChange = async row => {
     try {
         const res = await adminApi.news.patchNews(row.id)
         if (res.data.status === 'success') return Reminder.fire({ icon: 'success', title: res.data.msg })
+        return Reminder.fire({ icon: 'warning', title: res.data.msg || '發生未知錯誤，請稍後再試！' })
     } catch (error) {
         Reminder.fire({ icon: 'warning', title: '發生未知錯誤，請稍後再試！' })
     }
@@ -96,9 +98,9 @@ const handleDelete = async row => {
         const res = await adminApi.news.deleteNews(row.id)
         if (res.data.status === 'success') {
             Reminder.fire({ icon: 'success', title: res.data.msg })
-            getNewsList()
-        } else if (res.data.status === 'warning') {
-            Reminder.fire({ icon: 'warning', title: res.data.msg })
+            await getNewsList()
+        } else {
+            Reminder.fire({ icon: 'warning', title: res.data.msg || '發生未知錯誤，請稍後再試！' })
         }
     } catch (error) {
         Reminder.fire({ icon: 'error', title: '發生未知錯誤，請稍後再試！' })

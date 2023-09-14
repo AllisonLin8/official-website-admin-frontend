@@ -1,20 +1,20 @@
 <template>
     <el-button
         circle
-        :icon="View"
         size="small"
         type="success"
+        :icon="View"
         @click="handlePreview(props.row)"
     />
     <el-drawer 
-        v-model="visibilityBinding" 
         size="60%" 
-        :before-close="handleClose"
+        v-model="visibilityBinding" 
         :append-to-body="true"
+        :before-close="handleClose"
         :modal-append-to-body="false"
     >
         <template #header>
-            <h4>預覽案例</h4>
+            <h4>預覽新聞</h4>
         </template>
         <template #default>
             <div>
@@ -53,5 +53,5 @@ const handlePreview = async row => {
     }
 }
 
-const handleClose = async (done) => { done() }
+const handleClose = async (done) => { await done() }
 </script>
