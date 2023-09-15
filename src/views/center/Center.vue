@@ -31,7 +31,7 @@
                         @keyup.enter="submitForm(userFormRef)"
                     >
                         <el-form-item label="Name" prop="name">
-                            <el-input v-model="userForm.name" />
+                            <el-input v-model="userForm.name" :disabled="$store.state.userInfo.name==='root'" />
                         </el-form-item>
                         <el-form-item label="Intro" prop="intro">
                             <el-input v-model="userForm.intro" type="textarea" />

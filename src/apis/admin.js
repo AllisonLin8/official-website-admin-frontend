@@ -79,4 +79,18 @@ export const adminApi = {
       return apiHelper.get('/adminapi/categories')
     },
   },
+  products: {
+    postProduct(newsData) {
+      return apiHelper.post('/adminapi/products/', newsData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+  },
+  varieties: {
+    getVarieties() {
+      return apiHelper.get('/adminapi/varieties')
+    },
+  },
 }
