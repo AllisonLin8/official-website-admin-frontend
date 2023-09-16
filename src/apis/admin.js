@@ -87,6 +87,24 @@ export const adminApi = {
         },
       })
     },
+    getProducts(length) {
+      return apiHelper.get(`/adminapi/products?length=${length}`)
+    },
+    deleteProduct(id) {
+      return apiHelper.delete(`/adminapi/products/${id}`)
+    },
+    getProduct(id, isDateFormatted) {
+      return apiHelper.get(
+        `/adminapi/products/${id}?isDateFormatted=${isDateFormatted}`
+      )
+    },
+    putProduct(newsData) {
+      return apiHelper.put('/adminapi/products/', newsData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
   },
   varieties: {
     getVarieties() {

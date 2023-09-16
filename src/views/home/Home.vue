@@ -22,9 +22,11 @@
                 <span>公司產品</span>
             </div>
         </template>
-        <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="item in 6" :key="item">
-                <h3 text="2xl" justify="center">{{ item }}</h3>
+        <el-carousel v-if="productLoopList.length" :interval="4000" type="card" height="200px">
+            <el-carousel-item v-for="item in productLoopList" :key="item.id">
+                <div :style="{backgroundImage:`url(${item.cover})`, backgroundSize:'contain'}">
+                    <h3 text="2xl" justify="center">{{ item.title }}</h3>
+                </div>
             </el-carousel-item>
         </el-carousel>
     </el-card>
@@ -33,15 +35,29 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import store from '@/store'
+import { adminApi } from '@/apis/admin'
 
 const userAvatar = store.state.userInfo.avatar
 const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 const avatarUrl = computed(() => userAvatar ? userAvatar : circleAvatar)
 const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每一天💚 ʕ๑•ɷ•๑ʔ 🎉' : '喝杯咖啡☕繼續努力 ฅʕ•Ⱉ•ʔฅ 💚')
+const productLoopList = ref([])
 
+const getProducts = async () => {
+    try {
+        const res = await adminApi.products.getProducts(6)
+        if (res.data.status === 'success') return productLoopList.value = res.data.products
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+onMounted(() => {
+    getProducts()
+})
 // 測試token是否刷新↓
 // import { adminApi } from '../../apis/admin'
 // import { Reminder } from '../../utils/helpers'
@@ -67,7 +83,7 @@ const welcomeText = computed(() => new Date().getHours() < 15 ? '開心快樂每
 <style lang="scss" scoped>
 .el-carousel__item {
     h3 {
-        color: #475669;
+        color: #000;
         opacity: 0.75;
         line-height: 200px;
         margin: 0;

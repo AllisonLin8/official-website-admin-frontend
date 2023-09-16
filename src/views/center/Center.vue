@@ -62,15 +62,15 @@ import UploadImg from '@/components/UploadImg'
 import { adminApi } from '@/apis/admin'
 import { Reminder, formErrReminder } from '@/utils/helpers'
 
-const { name, intro, avatar } = store.state.userInfo
+const { name, intro } = store.state.userInfo
 const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-const avatarUrl = computed(() => avatar ? avatar : circleAvatar)
+const avatarUrl = computed(() => store.state.userInfo.avatar ? store.state.userInfo.avatar : circleAvatar)
 
 const userFormRef = ref()
 const userForm = reactive({
     name,
     intro,
-    avatar,
+    avatar: '',
     file: null,
 })
 const userFormRules = reactive({
@@ -100,6 +100,7 @@ const submitForm = async (userFormRef) => {
                     const res = await adminApi.users.upload(params)
                     if (res.data.status === 'success') {
                         store.commit('changeUserInfo', res.data.userInfo)
+                        userForm.avatar = null
                         return Reminder.fire({ icon: 'success', title: res.data.msg })
                     }
                 } catch (error) {
