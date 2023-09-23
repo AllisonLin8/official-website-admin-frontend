@@ -81,7 +81,7 @@ const getNewsList = async () => {
 
 const handleIsPublishChange = async row => {
     try {
-        const res = await adminApi.news.patchNews(row.id)
+        const res = await adminApi.news.patchNewsIsPublished(row.id)
         if (res.data.status === 'success') return Reminder.fire({ icon: 'success', title: res.data.msg })
         return Reminder.fire({ icon: 'warning', title: res.data.msg || '發生未知錯誤，請稍後再試！' })
     } catch (error) {

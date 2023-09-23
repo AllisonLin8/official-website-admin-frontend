@@ -15,6 +15,9 @@
                                 <template #dropdown>
                                         <el-dropdown-menu>
                                                 <el-dropdown-item @click="handleCenter">個人資料</el-dropdown-item>
+                                                <el-dropdown-item class="website-box">
+                                                        <a href="http://localhost:8081/" class="website">公司官網</a>
+                                                </el-dropdown-item>
                                                 <el-dropdown-item @click="handleLogout">登出</el-dropdown-item>
                                         </el-dropdown-menu>
                                 </template>
@@ -55,6 +58,13 @@ const handleLogout = () => {
                 color: #005089;
                 .left .el-icon{
                         cursor: pointer;
+                }
+        }
+        .website {
+                text-decoration: none; 
+                color: #303133;
+                &:hover {
+                        color: #409EFF;
                 }
         }
 </style>

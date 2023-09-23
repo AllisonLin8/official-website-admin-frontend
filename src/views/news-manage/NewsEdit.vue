@@ -72,6 +72,7 @@ const categoryOptions = ref([])
 
 const newsFormRef = ref()
 const newsForm = reactive({
+  id: '',
   title: '',
   content: '',
   category: '',
@@ -132,7 +133,7 @@ const submitForm = async (newsFormRef) => {
           params.append(i, newsForm[i])
         }
         try {
-          const res = await adminApi.news.putNews(params)
+          const res = await adminApi.news.putNews(newsForm.id, params)
           if (res.data.status === 'success') {
             Reminder.fire({ icon: 'success', title: res.data.msg })
             return router.push('/news-manage/newslist')

@@ -2,7 +2,7 @@
     <div>
         <el-page-header icon="null" title="企業官網後台管理">
             <template #content>
-                <span class="text-large font-600 mr-3"> 個人資料 </span>
+                <span class="text-large font-600 mr-3">個人資料</span>
             </template>
         </el-page-header>
         <el-row class="my-5" :gutter="20">
@@ -17,7 +17,7 @@
                 <el-card :size="20">
                     <template #header>
                         <div class="card-header">
-                            <span class="fs-4 fw-bold">個人資訊</span>
+                            <span class="fs-4 fw-bold">個人資料</span>
                         </div>
                     </template>
                     <el-form
@@ -62,7 +62,7 @@ import UploadImg from '@/components/UploadImg'
 import { adminApi } from '@/apis/admin'
 import { Reminder, formErrReminder } from '@/utils/helpers'
 
-const { name, intro } = store.state.userInfo
+const { id, name, intro } = store.state.userInfo
 const circleAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 const avatarUrl = computed(() => store.state.userInfo.avatar ? store.state.userInfo.avatar : circleAvatar)
 
@@ -97,7 +97,7 @@ const submitForm = async (userFormRef) => {
                     params.append(i, userForm[i])
                 }
                 try {
-                    const res = await adminApi.users.upload(params)
+                    const res = await adminApi.users.patchUserProfile(id, params)
                     if (res.data.status === 'success') {
                         store.commit('changeUserInfo', res.data.userInfo)
                         userForm.avatar = null

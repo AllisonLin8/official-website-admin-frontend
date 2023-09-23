@@ -67,6 +67,7 @@ const varietyOptions = ref([])
 
 const productFormRef = ref()
 const productForm = reactive({
+  id: '',
   title: '',
   subtitle: '',
   variety: '',
@@ -123,7 +124,7 @@ const submitForm = async (productFormRef) => {
           params.append(i, productForm[i])
         }
         try {
-          const res = await adminApi.products.putProduct(params)
+          const res = await adminApi.products.putProduct(productForm.id, params)
           if (res.data.status === 'success') {
             Reminder.fire({ icon: 'success', title: res.data.msg })
             return router.push('/product-manage/productlist')

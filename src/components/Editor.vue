@@ -83,7 +83,7 @@ const uploadModule = ref({
       return new Promise((resolve, reject) => {
         const formData = new FormData()
         formData.append("file", file)
-        adminApi.news.upload(formData)
+        adminApi.news.postContentImg(formData)
           .then(res => {
             resolve(res.data.imgUrl)
           })

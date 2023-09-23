@@ -103,7 +103,7 @@ const getRoles = async () => {
 
 const handleDelete = async row => {
     try {
-        const res = await adminApi.users.deleteUser(row.id)
+        const res = await adminApi.users.patchUserIsDeleted(row.id)
         if (res.data.status === 'success') {
             Reminder.fire({ icon: 'success', title: res.data.msg })
             row.isDeleted = !row.isDeleted

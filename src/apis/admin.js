@@ -2,18 +2,18 @@ import { apiHelper } from '../utils/axios'
 
 export const adminApi = {
   users: {
-    getHome() {
-      // TODO 測試token是否刷新用
-      return apiHelper.get('/adminapi/users/home')
-    },
+    // getHome() {
+    //   // TODO 測試token是否刷新用
+    //   return apiHelper.get('/adminapi/users/home')
+    // },
     login(loginData) {
       return apiHelper.post('/adminapi/users/login', loginData)
     },
     signUp(signUpData) {
       return apiHelper.post('/adminapi/users/signup', signUpData)
     },
-    upload(uploadData) {
-      return apiHelper.post('/adminapi/users/upload', uploadData, {
+    patchUserProfile(id, newData) {
+      return apiHelper.patch(`/adminapi/users/${id}/profile`, newData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -25,11 +25,11 @@ export const adminApi = {
     getUser(id) {
       return apiHelper.get(`/adminapi/users/${id}`)
     },
-    deleteUser(id) {
-      return apiHelper.delete(`/adminapi/users/${id}`)
+    patchUserIsDeleted(id) {
+      return apiHelper.patch(`/adminapi/users/${id}/isDeleted`)
     },
-    putUser(id, editData) {
-      return apiHelper.put(`/adminapi/users/edit/${id}`, editData)
+    putUser(id, newData) {
+      return apiHelper.put(`/adminapi/users/${id}`, newData)
     },
   },
   roles: {
@@ -38,15 +38,15 @@ export const adminApi = {
     },
   },
   news: {
-    upload(uploadData) {
-      return apiHelper.post('/adminapi/news/upload', uploadData, {
+    postContentImg(newData) {
+      return apiHelper.post(`/adminapi/newslist/contentImg`, newData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
     },
-    postNews(newsData) {
-      return apiHelper.post('/adminapi/news/', newsData, {
+    postNews(newData) {
+      return apiHelper.post('/adminapi/newslist', newData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -54,20 +54,20 @@ export const adminApi = {
     },
     getNews(id, isDateFormatted) {
       return apiHelper.get(
-        `/adminapi/news/${id}?isDateFormatted=${isDateFormatted}`
+        `/adminapi/newslist/${id}?isDateFormatted=${isDateFormatted}`
       )
     },
     getNewsList() {
       return apiHelper.get('/adminapi/newslist')
     },
-    patchNews(id) {
-      return apiHelper.patch(`/adminapi/news/publish/${id}`)
+    patchNewsIsPublished(id) {
+      return apiHelper.patch(`/adminapi/newslist/${id}/isPublished`)
     },
     deleteNews(id) {
-      return apiHelper.delete(`/adminapi/news/${id}`)
+      return apiHelper.delete(`/adminapi/newslist/${id}`)
     },
-    putNews(newsData) {
-      return apiHelper.put('/adminapi/news/', newsData, {
+    putNews(id, newsData) {
+      return apiHelper.put(`/adminapi/newslist/${id}`, newsData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -80,8 +80,8 @@ export const adminApi = {
     },
   },
   products: {
-    postProduct(newsData) {
-      return apiHelper.post('/adminapi/products/', newsData, {
+    postProduct(newData) {
+      return apiHelper.post('/adminapi/products/', newData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -98,8 +98,8 @@ export const adminApi = {
         `/adminapi/products/${id}?isDateFormatted=${isDateFormatted}`
       )
     },
-    putProduct(newsData) {
-      return apiHelper.put('/adminapi/products/', newsData, {
+    putProduct(id, newData) {
+      return apiHelper.put(`/adminapi/products/${id}`, newData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
