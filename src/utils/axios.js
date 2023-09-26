@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'http://localhost:3000'
+const baseURL = process.env.VUE_APP_BASE_URL
 const axiosInstance = axios.create({ baseURL })
 
 axiosInstance.interceptors.request.use(
@@ -15,8 +15,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => {
     const token = response.headers['authorization']
-    // TODO 確認token是否刷新↓，完成後刪除
-    console.log('這邊是新token', token)
     if (token) localStorage.setItem('token', token)
     return response
   },
