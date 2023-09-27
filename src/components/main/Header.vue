@@ -16,7 +16,7 @@
                                         <el-dropdown-menu>
                                                 <el-dropdown-item @click="handleCenter">個人資料</el-dropdown-item>
                                                 <el-dropdown-item class="website-box">
-                                                        <a href="http://localhost:8081/" class="website">公司官網</a>
+                                                        <a :href="WEB_URL" class="website">公司官網</a>
                                                 </el-dropdown-item>
                                                 <el-dropdown-item @click="handleLogout">登出</el-dropdown-item>
                                         </el-dropdown-menu>
@@ -35,6 +35,7 @@ import { Reminder } from '@/utils/helpers'
 
 const store = useStore()
 const router = useRouter()
+const WEB_URL = process.env.VUE_APP_WEB_URL
 
 const handleCollapsed = () => {
         store.commit('changeCollapsed')
